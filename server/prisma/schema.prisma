@@ -1,0 +1,80 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_DATABASE_URL")
+}
+
+model User {
+  id            String          @id               // Clerk user ID
+  email         String          @unique
+  accounts      SocialAccount[]
+  posts         Post[]
+  createdAt     DateTime        @default(now())
+}
+
+model SocialAccount {
+  id            String    @id   @default(cuid())
+  userId        String
+  user          User      @relation(fields: [userId], references: [id])
+  platform      String                             // instagram | linkedin | twitter | ...
+  zernioId      String                             // Zernio connected account ID
+  handle        String
+  displayName   String
+  avatarUrl     String?
+  isActive      Boolean   @default(true)
+  createdAt     DateTime  @default(now())
+  posts         Post[]
+  analytics     AccountAnalytics[]
+}
+
+enum PostStatus {
+  DRAFT
+  SCHEDULED
+  PUBLISHED
+  FAILED
+}
+
+model Post {
+  id              String        @id @default(cuid())
+  userId          String
+  user            User          @relation(fields: [userId], references: [id])
+  accounts        SocialAccount[]
+  content         String
+  mediaUrls       String[]
+  status          PostStatus    @default(DRAFT)
+  scheduledAt     DateTime?
+  publishedAt     DateTime?
+  zernioPostId    String?                          // Returned by Zernio after publish
+  triggerJobId    String?                          // Trigger.dev job reference
+  analytics       PostAnalytics?
+  createdAt       DateTime      @default(now())
+}
+
+model PostAnalytics {
+  id            String    @id @default(cuid())
+  postId        String    @unique
+  post          Post      @relation(fields: [postId], references: [id])
+  impressions   Int       @default(0)
+  likes         Int       @default(0)
+  comments      Int       @default(0)
+  shares        Int       @default(0)
+  reach         Int       @default(0)
+  lastFetchedAt DateTime  @default(now())
+}
+
+model AccountAnalytics {
+  id              String        @id @default(cuid())
+  accountId       String
+  account         SocialAccount @relation(fields: [accountId], references: [id])
+  followers       Int
+  followingCount  Int
+  profileViews    Int
+  recordedAt      DateTime      @default(now())
+}
