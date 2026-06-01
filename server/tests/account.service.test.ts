@@ -1,6 +1,7 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { AccountService } from '../src/domains/accounts/account.service';
-import { IAccountRepository } from '../src/domains/accounts/account.entity';
+import { IAccountRepository, SocialAccountEntity } from '../src/domains/accounts/account.entity';
+import { NotFoundError } from '../src/shared/errors/AppError';
 
 describe('AccountService Unit Tests', () => {
   let accountService: AccountService;
@@ -8,9 +9,10 @@ describe('AccountService Unit Tests', () => {
 
   beforeEach(() => {
     mockRepo = {
+      create: vi.fn(),
       findById: vi.fn(),
       findByUserId: vi.fn(),
-      create: vi.fn(),
+      findAll: vi.fn(),
       update: vi.fn(),
       delete: vi.fn(),
     };
@@ -18,24 +20,34 @@ describe('AccountService Unit Tests', () => {
   });
 
   it('should return connected accounts for a user', async () => {
-    const mockAccounts = [{ id: '1', userId: 'u1', platform: 'x', handle: 'h1', zernioId: 'z1', displayName: 'D1', isActive: true, createdAt: new Date() }];
+    const mockAccounts: SocialAccountEntity[] = [];
     vi.mocked(mockRepo.findByUserId).mockResolvedValue(mockAccounts);
 
-    const result = await accountService.getConnectedAccounts('u1');
+    const result = await accountService.getConnectedAccounts('user-1');
     expect(result).toEqual(mockAccounts);
-    expect(mockRepo.findByUserId).toHaveBeenCalledWith('u1');
+    expect(mockRepo.findByUserId).toHaveBeenCalledWith('user-1');
   });
 
-  it('should throw error if disconnecting non-existent account', async () => {
+  it('should throw NotFoundError if disconnecting non-existent account', async () => {
     vi.mocked(mockRepo.findById).mockResolvedValue(null);
 
-    await expect(accountService.disconnectAccount('a1', 'u1')).rejects.toThrow('Account not found or unauthorized');
+    await expect(accountService.disconnectAccount('acc-1', 'user-1'))
+      .rejects.toThrow(NotFoundError);
   });
 
-  it('should throw error if disconnecting account belonging to another user', async () => {
-    const mockAccount = { id: 'a1', userId: 'other-user', platform: 'x', handle: 'h1', zernioId: 'z1', displayName: 'D1', isActive: true, createdAt: new Date() };
+  it('should throw NotFoundError if disconnecting account belonging to another user', async () => {
+    const mockAccount: SocialAccountEntity = {
+      id: 'acc-1',
+      userId: 'user-2',
+      platform: 'twitter',
+      zernioId: 'z-1',
+      isActive: true,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    };
     vi.mocked(mockRepo.findById).mockResolvedValue(mockAccount);
 
-    await expect(accountService.disconnectAccount('a1', 'u1')).rejects.toThrow('Account not found or unauthorized');
+    await expect(accountService.disconnectAccount('acc-1', 'user-1'))
+      .rejects.toThrow(NotFoundError);
   });
 });

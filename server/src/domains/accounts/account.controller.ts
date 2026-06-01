@@ -1,4 +1,4 @@
-import { Response } from 'express';
+import { Request, Response, NextFunction } from 'express';
 import { AuthRequest } from '../../shared/middleware/auth.middleware';
 import { AccountService } from './account.service';
 import logger from '../../shared/utils/logger';
@@ -6,40 +6,37 @@ import logger from '../../shared/utils/logger';
 export class AccountController {
   constructor(private readonly accountService: AccountService) {}
 
-  getAccounts = async (req: AuthRequest, res: Response) => {
+  getAccounts = async (req: AuthRequest, res: Response, next: NextFunction) => {
     try {
       const accounts = await this.accountService.getConnectedAccounts(req.user!.id);
       res.json(accounts);
     } catch (error: any) {
-      logger.error('Error fetching accounts:', error);
-      res.status(500).json({ error: 'Failed to fetch accounts' });
+      next(error);
     }
   };
 
-  connect = async (req: AuthRequest, res: Response) => {
+  connect = async (req: AuthRequest, res: Response, next: NextFunction) => {
     const { platform, redirectUri } = req.body;
     if (!platform || !redirectUri) {
       return res.status(400).json({ error: 'Platform and redirectUri are required' });
     }
 
     try {
-      const url = await this.accountService.getConnectUrl(platform, redirectUri);
+      const url = await this.accountService.getConnectUrl(req.user!.id, platform, redirectUri);
       res.json({ url });
     } catch (error: any) {
-      res.status(500).json({ error: 'Failed to initiate connection' });
+      next(error);
     }
   };
 
-  callback = async (req: AuthRequest, res: Response) => {
-    const { code } = req.body;
-    if (!code) {
-      return res.status(400).json({ error: 'Code is required' });
-    }
-
+  callback = async (req: AuthRequest, res: Response, next: NextFunction) => {
+    // Note: 'code' is optional now because Zernio Standard mode uses direct account details in redirect params
+    // But we use the sync/list approach in handleCallback which doesn't strictly need the code here.
     try {
-      const account = await this.accountService.handleCallback(req.user!.id, code);
-      res.status(201).json(account);
+      const accounts = await this.accountService.handleCallback(req.user!.id);
+      res.status(201).json(accounts);
     } catch (error: any) {
+      logger.error({ error }, 'Controller: Failed to complete connection');
       res.status(500).json({ error: 'Failed to complete connection' });
     }
   };

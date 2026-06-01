@@ -1,8 +1,23 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import axios from 'axios';
-import { zernioClient } from '../src/infrastructure/zernio/zernio.client';
 
-vi.mock('axios');
+// Mock axios BEFORE importing the client
+vi.mock('axios', () => {
+  return {
+    default: {
+      create: vi.fn().mockReturnValue({
+        post: vi.fn(),
+        get: vi.fn(),
+        interceptors: {
+          request: { use: vi.fn() },
+          response: { use: vi.fn() },
+        },
+      }),
+    },
+  };
+});
+
+import { zernioClient } from '../src/infrastructure/zernio/zernio.client';
 
 describe('ZernioClient Unit Tests', () => {
   beforeEach(() => {
@@ -11,9 +26,11 @@ describe('ZernioClient Unit Tests', () => {
 
   it('should get connection URL', async () => {
     const mockUrl = 'https://oauth.zernio.com/auth';
-    vi.mocked(axios.create().post).mockResolvedValue({ data: { url: mockUrl } });
+    const mockAxiosInstance = vi.mocked(axios.create)();
+    vi.mocked(mockAxiosInstance.post).mockResolvedValueOnce({ data: { url: mockUrl } });
 
-    // Since we export a singleton, we need to handle the axios mock carefully
-    // In a real scenario, we might use a dependency injection pattern for clients too
+    const result = await zernioClient.getConnectionUrl('twitter', 'http://localhost/callback');
+    expect(result).toBe(mockUrl);
+    expect(mockAxiosInstance.post).toHaveBeenCalled();
   });
 });

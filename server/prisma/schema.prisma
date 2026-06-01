@@ -12,11 +12,12 @@ datasource db {
 }
 
 model User {
-  id            String          @id               // Clerk user ID
-  email         String          @unique
-  accounts      SocialAccount[]
-  posts         Post[]
-  createdAt     DateTime        @default(now())
+  id              String          @id               // Clerk user ID
+  email           String          @unique
+  zernioProfileId String?                           // Zernio container ID
+  accounts        SocialAccount[]
+  posts           Post[]
+  createdAt       DateTime        @default(now())
 }
 
 model SocialAccount {

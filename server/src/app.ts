@@ -4,6 +4,8 @@ import helmet from 'helmet';
 import dotenv from 'dotenv';
 import logger from './shared/utils/logger';
 import accountRoutes from './domains/accounts/account.routes';
+import { errorMiddleware } from './shared/middleware/error.middleware';
+import { NotFoundError } from './shared/errors/AppError';
 
 dotenv.config();
 
@@ -26,5 +28,13 @@ app.use('/api/accounts', accountRoutes);
 app.get('/health', (req: Request, res: Response) => {
   res.json({ status: 'ok', timestamp: new Date().toISOString() });
 });
+
+// 404 handler
+app.use((req, res, next) => {
+  next(new NotFoundError(`Route ${req.method} ${req.url} not found`));
+});
+
+// Global Error Handler (Must be last)
+app.use(errorMiddleware);
 
 export default app;

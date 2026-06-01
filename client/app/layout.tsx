@@ -1,8 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import Providers from "@/components/Providers";
-import { Toaster } from "@/components/ui/sonner"
-import { ThemeProvider } from "@/components/ui/theme-provider"
 
 export const metadata: Metadata = {
   title: "Postly | AI Social Media Management",
@@ -17,12 +15,7 @@ export default function RootLayout({
   return (
     <html lang="en" className="h-full" suppressHydrationWarning>
       <body className="min-h-full flex flex-col bg-background text-foreground">
-        <Providers>
-          <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
-            {children}
-            <Toaster/>
-          </ThemeProvider>
-        </Providers>
+        <Providers>{children}</Providers>
       </body>
     </html>
   );
