@@ -27,13 +27,16 @@ export class AccountService {
         zernioProfileId = await zernio.createProfile(`${userId}'s Postly Workspace`);
       }
 
+      //get users email to update the user record
+      const user = await prisma.user.findUnique({where: {id: userId}})
+
       // Upsert user record to handle JIT provisioning
       const updatedUser = await prisma.user.upsert({
         where: { id: userId },
         update: { zernioProfileId },
-        create: { 
+        create: {   
           id: userId, 
-          email: 'user@temp.com', // In a real app, we'd sync this from the token or a separate webhook
+          email: user?.email || 'user@temp.com', 
           zernioProfileId 
         }
       });

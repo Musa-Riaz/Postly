@@ -4,6 +4,10 @@ import helmet from 'helmet';
 import dotenv from 'dotenv';
 import logger from './shared/utils/logger';
 import accountRoutes from './domains/accounts/account.routes';
+import postRoutes from './domains/posts/post.routes';
+import aiRoutes from './domains/ai/ai.routes';
+import webhookRoutes from './domains/webhooks/webhook.routes';
+import analyticsRoutes from './domains/analytics/analytics.routes';
 import { errorMiddleware } from './shared/middleware/error.middleware';
 import { NotFoundError } from './shared/errors/AppError';
 
@@ -23,6 +27,10 @@ app.use((req, res, next) => {
 
 // Routes
 app.use('/api/accounts', accountRoutes);
+app.use('/api/posts', postRoutes);
+app.use('/api/ai', aiRoutes);
+app.use('/api/webhooks', webhookRoutes);
+app.use('/api/analytics', analyticsRoutes);
 
 // Health check endpoint
 app.get('/health', (req: Request, res: Response) => {

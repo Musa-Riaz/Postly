@@ -49,6 +49,7 @@ model Post {
   accounts        SocialAccount[]
   content         String
   mediaUrls       String[]
+  platformSettings Json?                         // Store platform-specific overrides (e.g., { "linkedin": { "content": "..." } })
   status          PostStatus    @default(DRAFT)
   scheduledAt     DateTime?
   publishedAt     DateTime?

@@ -3,7 +3,8 @@ import {
   UserCircle, 
   Send, 
   BarChart3, 
-  Settings,
+  Calendar,
+  FileText,
   LogOut
 } from "lucide-react";
 import {
@@ -26,9 +27,10 @@ import { ThemeToggle } from "@/components/ThemeToggle"
 const navigation = [
   { name: 'Dashboard', icon: LayoutDashboard, href: '/dashboard' },
   { name: 'Social Accounts', icon: UserCircle, href: '/dashboard/accounts' },
-  { name: 'Post Composer', icon: Send, href: '/dashboard/posts' },
-  { name: 'Analytics', icon: BarChart3, href: '/dashboard/analytics' },
-  { name: 'Settings', icon: Settings, href: '/dashboard/settings' },
+  { name: 'Post Composer', icon: Send, href: '/dashboard/composer' },
+  { name: 'Content Manager', icon: FileText, href: '/dashboard/posts' },
+  { name: 'Schedule', icon: Calendar, href: '/dashboard/schedule' },
+  { name: 'Analytics', icon: BarChart3, href: '/dashboard/analytics' }
 ]
 
 export function DashboardSidebar() {

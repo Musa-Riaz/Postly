@@ -1,0 +1,77 @@
+.calendar-container {
+  font-family: inherit;
+}
+
+.fc {
+  --fc-border-color: black;
+  --fc-daygrid-event-dot-width: 8px;
+  --fc-list-event-dot-width: 8px;
+  --fc-neutral-bg-color: #F8F9FA;
+  --fc-page-bg-color: white;
+  --fc-today-bg-color: #E6F0FF;
+}
+
+.fc .fc-toolbar-title {
+  font-size: 1.5rem;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: -0.05em;
+}
+
+.fc .fc-button-primary {
+  background-color: white;
+  color: black;
+  border: 2px solid black;
+  font-weight: 700;
+  text-transform: uppercase;
+  border-radius: 0;
+  box-shadow: 2px 2px 0px 0px rgba(0,0,0,1);
+  transition: all 0.1s;
+}
+
+.fc .fc-button-primary:hover {
+  background-color: #F0F0F0;
+  color: black;
+  border: 2px solid black;
+  transform: translate(1px, 1px);
+  box-shadow: 1px 1px 0px 0px rgba(0,0,0,1);
+}
+
+.fc .fc-button-primary:not(:disabled).fc-button-active, 
+.fc .fc-button-primary:not(:disabled):active {
+  background-color: #FFB800;
+  color: black;
+  border: 2px solid black;
+  transform: translate(2px, 2px);
+  box-shadow: none;
+}
+
+.fc th {
+  background-color: black;
+  color: white;
+  padding: 12px 0 !important;
+  text-transform: uppercase;
+  font-weight: 900;
+  font-size: 0.75rem;
+}
+
+.fc-event {
+  border-width: 2px !important;
+  border-radius: 4px !important;
+  padding: 2px 4px !important;
+  font-weight: 700 !important;
+  box-shadow: 2px 2px 0px 0px rgba(0,0,0,1);
+  cursor: pointer;
+}
+
+.fc-event:hover {
+  transform: scale(1.02);
+}
+
+.fc-daygrid-day.fc-day-today {
+  background-color: rgba(163, 230, 53, 0.2) !important; /* Main color with low opacity */
+}
+
+.fc-v-event {
+  background-color: #FFB800;
+}

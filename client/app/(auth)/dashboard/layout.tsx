@@ -1,9 +1,8 @@
 "use client"
 
-import { SidebarProvider, SidebarInset, SidebarTrigger } from "@/components/ui/sidebar"
+import { SidebarProvider, SidebarInset } from "@/components/ui/sidebar"
 import { DashboardSidebar } from "@/components/layout/DashboardSidebar"
 
-import { Separator } from "@/components/ui/separator"
 
 export default function DashboardLayout({
   children,
