@@ -1,6 +1,6 @@
-import { ZernioClient, zernio } from '../../infrastructure/zernio/zernio.client';
-import { IPostRepository, Post } from './post.entity';
-import logger from '../../shared/utils/logger';
+import { ZernioClient, zernio } from '../../infrastructure/zernio/zernio.client.js';
+import { IPostRepository, Post } from './post.entity.js';
+import logger from '../../shared/utils/logger.js';
 
 export class PostPublisher {
   constructor(
