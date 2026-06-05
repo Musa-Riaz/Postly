@@ -1,7 +1,7 @@
-import { IPostRepository, CreatePostDto, Post, PostFilterDto, PostSortDto } from './post.entity';
-import { NotFoundError } from '../../shared/errors/AppError';
-import { PostPublisher } from './post.publisher';
-import { ZernioClient, zernio } from '../../infrastructure/zernio/zernio.client';
+import { IPostRepository, CreatePostDto, Post, PostFilterDto, PostSortDto } from './post.entity.js';
+import { NotFoundError } from '../../shared/errors/AppError.js';
+import { PostPublisher } from './post.publisher.js';
+import { ZernioClient, zernio } from '../../infrastructure/zernio/zernio.client.js';
 
 export class PostService {
   constructor(

@@ -1,7 +1,6 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { PostPublisher } from '../src/domains/posts/post.publisher';
-import { IPostRepository } from '../src/domains/posts/post.entity';
-import { ZernioClient } from '../src/infrastructure/zernio/zernio.client';
+import { PostPublisher } from '../src/domains/posts/post.publisher.js';
+import { IPostRepository } from '../src/domains/posts/post.entity.js';
 import { PostStatus } from '@prisma/client';
 
 describe('PostPublisher Unit Tests', () => {

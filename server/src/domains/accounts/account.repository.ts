@@ -1,5 +1,5 @@
-import { IAccountRepository, SocialAccountEntity } from './account.entity';
-import prisma from '../../infrastructure/prisma/client';
+import { IAccountRepository, SocialAccountEntity } from './account.entity.js';
+import prisma from '../../infrastructure/prisma/client.js';
 
 export class AccountRepository implements IAccountRepository {
   async findById(id: string): Promise<SocialAccountEntity | null> {

@@ -1,5 +1,5 @@
 import { GoogleGenerativeAI } from '@google/generative-ai';
-import { AIService, GenerateOptions } from './ai.entity';
+import { AIService, GenerateOptions } from './ai.entity.js';
 
 export class GeminiService implements AIService {
   private genAI: GoogleGenerativeAI;

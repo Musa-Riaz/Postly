@@ -1,4 +1,4 @@
-import { GeminiService } from './src/domains/ai/ai.service';
+import { GeminiService } from './src/domains/ai/ai.service.js';
 import * as dotenv from 'dotenv';
 import * as path from 'path';
 

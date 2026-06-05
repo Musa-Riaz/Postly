@@ -1,6 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
-import { AnalyticsService } from './analytics.service';
-import logger from '../../shared/utils/logger';
+import { AnalyticsService } from './analytics.service.js';
 
 export class AnalyticsController {
   constructor(private readonly analyticsService: AnalyticsService) {}

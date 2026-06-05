@@ -1,7 +1,7 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import request from 'supertest';
 import express from 'express';
-import { WebhookController } from '../src/domains/webhooks/webhook.controller';
+import { WebhookController } from '../src/domains/webhooks/webhook.controller.js';
 
 const app = express();
 app.use(express.json());

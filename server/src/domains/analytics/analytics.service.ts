@@ -1,8 +1,6 @@
-import { ZernioClient, zernio } from '../../infrastructure/zernio/zernio.client';
-import prisma from '../../infrastructure/prisma/client';
-import logger from '../../shared/utils/logger';
-import { NotFoundError } from '../../shared/errors/AppError';
-import { platform } from 'node:os';
+import { ZernioClient, zernio } from '../../infrastructure/zernio/zernio.client.js';
+import prisma from '../../infrastructure/prisma/client.js';
+import { NotFoundError } from '../../shared/errors/AppError.js';
 
 export interface AnalyticsFilters {
   platform?: string;

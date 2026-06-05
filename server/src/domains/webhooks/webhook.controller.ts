@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
-import { IPostRepository } from '../posts/post.entity';
-import logger from '../../shared/utils/logger';
+import { IPostRepository } from '../posts/post.entity.js';
+import logger from '../../shared/utils/logger.js';
 
 export class WebhookController {
   constructor(private readonly postRepo: IPostRepository) {}

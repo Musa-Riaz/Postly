@@ -1,6 +1,6 @@
 import { PrismaClient } from '@prisma/client';
-import { IPostRepository, CreatePostDto, Post, PostFilterDto, PostSortDto } from './post.entity';
-import prisma from '../../infrastructure/prisma/client';
+import { IPostRepository, CreatePostDto, Post, PostFilterDto, PostSortDto } from './post.entity.js';
+import prisma from '../../infrastructure/prisma/client.js';
 
 export class PrismaPostRepository implements IPostRepository {
   private prisma: PrismaClient = prisma;

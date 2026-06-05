@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
-import { AuthRequest } from '../../shared/middleware/auth.middleware';
-import { AccountService } from './account.service';
-import logger from '../../shared/utils/logger';
+import { AuthRequest } from '../../shared/middleware/auth.middleware.js';
+import { AccountService } from './account.service.js';
+import logger from '../../shared/utils/logger.js';
 
 export class AccountController {
   constructor(private readonly accountService: AccountService) {}

@@ -1,8 +1,8 @@
 import { Router } from 'express';
-import { AccountController } from './account.controller';
-import { AccountService } from './account.service';
-import { AccountRepository } from './account.repository';
-import { authMiddleware } from '../../shared/middleware/auth.middleware';
+import { AccountController } from './account.controller.js';
+import { AccountService } from './account.service.js';
+import { AccountRepository } from './account.repository.js';
+import { authMiddleware } from '../../shared/middleware/auth.middleware.js';
 
 const router = Router();
 const repository = new AccountRepository();

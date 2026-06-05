@@ -1,9 +1,9 @@
 import { Router } from 'express';
-import { PostController } from './post.controller';
-import { PostService } from './post.service';
-import { PrismaPostRepository } from './post.repository';
-import { PostPublisher } from './post.publisher';
-import { authMiddleware } from '../../shared/middleware/auth.middleware';
+import { PostController } from './post.controller.js';
+import { PostService } from './post.service.js';
+import { PrismaPostRepository } from './post.repository.js';
+import { PostPublisher } from './post.publisher.js';
+import { authMiddleware } from '../../shared/middleware/auth.middleware.js';
 
 const router = Router();
 

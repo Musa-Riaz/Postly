@@ -1,7 +1,7 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { AccountService } from '../src/domains/accounts/account.service';
-import { IAccountRepository, SocialAccountEntity } from '../src/domains/accounts/account.entity';
-import { NotFoundError } from '../src/shared/errors/AppError';
+import { AccountService } from '../src/domains/accounts/account.service.js';
+import { IAccountRepository, SocialAccountEntity } from '../src/domains/accounts/account.entity.js';
+import { NotFoundError } from '../src/shared/errors/AppError.js';
 
 describe('AccountService Unit Tests', () => {
   let accountService: AccountService;

@@ -1,6 +1,6 @@
 import { Router } from 'express';
-import { WebhookController } from './webhook.controller';
-import { PrismaPostRepository } from '../posts/post.repository';
+import { WebhookController } from './webhook.controller.js';
+import { PrismaPostRepository } from '../posts/post.repository.js';
 
 const router = Router();
 const postRepo = new PrismaPostRepository();

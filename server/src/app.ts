@@ -2,14 +2,14 @@ import express, { Request, Response } from 'express';
 import cors from 'cors';
 import helmet from 'helmet';
 import dotenv from 'dotenv';
-import logger from './shared/utils/logger';
-import accountRoutes from './domains/accounts/account.routes';
-import postRoutes from './domains/posts/post.routes';
-import aiRoutes from './domains/ai/ai.routes';
-import webhookRoutes from './domains/webhooks/webhook.routes';
-import analyticsRoutes from './domains/analytics/analytics.routes';
-import { errorMiddleware } from './shared/middleware/error.middleware';
-import { NotFoundError } from './shared/errors/AppError';
+import logger from './shared/utils/logger.js';
+import accountRoutes from './domains/accounts/account.routes.js';
+import postRoutes from './domains/posts/post.routes.js';
+import aiRoutes from './domains/ai/ai.routes.js';
+import webhookRoutes from './domains/webhooks/webhook.routes.js';
+import analyticsRoutes from './domains/analytics/analytics.routes.js';
+import { errorMiddleware } from './shared/middleware/error.middleware.js';
+import { NotFoundError } from './shared/errors/AppError.js';
 
 dotenv.config();
 

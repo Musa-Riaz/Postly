@@ -1,7 +1,7 @@
 import { Response, NextFunction } from 'express';
-import { PostService } from './post.service';
-import { AuthenticationError } from '../../shared/errors/AppError';
-import { AuthRequest } from '../../shared/middleware/auth.middleware';
+import { PostService } from './post.service.js';
+import { AuthenticationError } from '../../shared/errors/AppError.js';
+import { AuthRequest } from '../../shared/middleware/auth.middleware.js';
 
 export class PostController {
   constructor(private readonly postService: PostService) {}

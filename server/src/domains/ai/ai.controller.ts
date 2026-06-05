@@ -1,7 +1,7 @@
 import { Response, NextFunction } from 'express';
-import { AIService } from './ai.entity';
-import { AuthRequest } from '../../shared/middleware/auth.middleware';
-import { AuthenticationError } from '../../shared/errors/AppError';
+import { AIService } from './ai.entity.js';
+import { AuthRequest } from '../../shared/middleware/auth.middleware.js';
+import { AuthenticationError } from '../../shared/errors/AppError.js';
 
 export class AIController {
   constructor(private readonly aiService: AIService) {}

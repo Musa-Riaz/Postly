@@ -1,5 +1,5 @@
-import prisma from './client';
-import logger from '../../shared/utils/logger';
+import prisma from './client.js';
+import logger from '../../shared/utils/logger.js';
 
 async function testConnection() {
   try {

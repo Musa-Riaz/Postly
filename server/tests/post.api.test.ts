@@ -1,8 +1,7 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import request from 'supertest';
 import express from 'express';
-import { PostController } from '../src/domains/posts/post.controller';
-import { PostService } from '../src/domains/posts/post.service';
+import { PostController } from '../src/domains/posts/post.controller.js';
 
 // Create a mock app for testing the controller
 const app = express();

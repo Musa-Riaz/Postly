@@ -1,7 +1,7 @@
 import { Router } from 'express';
-import { authMiddleware } from '../../shared/middleware/auth.middleware';
-import { AIController } from './ai.controller';
-import { GeminiService } from './ai.service';
+import { authMiddleware } from '../../shared/middleware/auth.middleware.js';
+import { AIController } from './ai.controller.js';
+import { GeminiService } from './ai.service.js';
 
 const router = Router();
 const aiService = new GeminiService();

@@ -1,8 +1,8 @@
-import { IAccountRepository } from './account.entity';
-import { zernio } from '../../infrastructure/zernio/zernio.client';
-import logger from '../../shared/utils/logger';
-import { NotFoundError, AuthenticationError } from '../../shared/errors/AppError';
-import prisma from '../../infrastructure/prisma/client';
+import { IAccountRepository } from './account.entity.js';
+import { zernio } from '../../infrastructure/zernio/zernio.client.js';
+import logger from '../../shared/utils/logger.js';
+import { NotFoundError, AuthenticationError } from '../../shared/errors/AppError.js';
+import prisma from '../../infrastructure/prisma/client.js';
 
 export class AccountService {
   constructor(private readonly accountRepo: IAccountRepository) {}

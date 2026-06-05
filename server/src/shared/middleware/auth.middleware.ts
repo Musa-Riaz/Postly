@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
 import jwksClient from 'jwks-rsa';
-import logger from '../utils/logger';
+import logger from '../utils/logger.js';
 
 export interface AuthRequest extends Request {
   user?: {

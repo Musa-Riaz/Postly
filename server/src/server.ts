@@ -1,5 +1,5 @@
-import app from './app';
-import logger from './shared/utils/logger';
+import app from './app.js';
+import logger from './shared/utils/logger.js';
 
 const PORT = parseInt(process.env.PORT || '3001', 10);
 
