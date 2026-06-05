@@ -38,7 +38,7 @@ describe('PostPublisher Unit Tests', () => {
 
   it('should publish post immediately when no scheduledFor is provided', async () => {
     vi.mocked(mockRepo.findById).mockResolvedValue(mockPost);
-    vi.mocked(mockZernioClient.publishPost).mockResolvedValue({ id: 'z-post-1' });
+    vi.mocked(mockZernioClient.publishPost).mockResolvedValue({ post: { id: 'z-post-1' } });
     vi.mocked(mockRepo.update).mockImplementation((id, data) => Promise.resolve({ ...mockPost, ...data }));
 
     const result = await postPublisher.publish('post-1', 'user-1');
@@ -56,7 +56,7 @@ describe('PostPublisher Unit Tests', () => {
   it('should schedule post when scheduledFor is provided', async () => {
     const scheduledDate = new Date(Date.now() + 100000);
     vi.mocked(mockRepo.findById).mockResolvedValue(mockPost);
-    vi.mocked(mockZernioClient.publishPost).mockResolvedValue({ id: 'z-post-1' });
+    vi.mocked(mockZernioClient.publishPost).mockResolvedValue({ post: { id: 'z-post-1' } });
     vi.mocked(mockRepo.update).mockImplementation((id, data) => Promise.resolve({ ...mockPost, ...data }));
 
     const result = await postPublisher.publish('post-1', 'user-1', scheduledDate);

@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
-import jwksClient from 'jwks-rsa';
+import { createRemoteJWKSet, jwtVerify } from 'jose';
 import logger from '../utils/logger.js';
 
 export interface AuthRequest extends Request {
@@ -11,33 +11,21 @@ export interface AuthRequest extends Request {
 }
 
 // Helper to get JWKS Client
-let _jwksClient: any = null;
-const getJwksClient = () => {
-  if (!_jwksClient) {
+let _jwks: any = null;
+const getJWKS = () => {
+  if (!_jwks) {
     const projectId = process.env.SUPABASE_PROJECT_ID;
     if (!projectId) {
       throw new Error('SUPABASE_PROJECT_ID is missing');
     }
-    _jwksClient = jwksClient({
-      jwksUri: `https://${projectId}.supabase.co/auth/v1/.well-known/jwks.json`
-    });
+    _jwks = createRemoteJWKSet(
+        new URL(`https://${projectId}.supabase.co/auth/v1/.well-known/jwks.json`)
+    );
   }
-  return _jwksClient;
+  return _jwks;
 };
 
-function getKey(header: any, callback: any) {
-  const client = getJwksClient();
-  client.getSigningKey(header.kid, function(err: any, key: any) {
-    if (err) {
-      callback(err);
-    } else {
-      const signingKey = key?.getPublicKey();
-      callback(null, signingKey);
-    }
-  });
-}
-
-export const authMiddleware = (req: AuthRequest, res: Response, next: NextFunction) => {
+export const authMiddleware = async (req: AuthRequest, res: Response, next: NextFunction) => {
   const authHeader = req.headers.authorization;
 
   if (!authHeader || !authHeader.startsWith('Bearer ')) {
@@ -53,22 +41,22 @@ export const authMiddleware = (req: AuthRequest, res: Response, next: NextFuncti
     
     // Check if token is ES256 (Supabase Default now)
     const tokenParts = token.split('.');
+    if (tokenParts.length !== 3) {
+      throw new Error('Invalid token format');
+    }
     const header = JSON.parse(Buffer.from(tokenParts[0], 'base64').toString());
 
     if (header.alg === 'ES256') {
-      jwt.verify(token, getKey, { algorithms: ['ES256'] }, (err, decoded) => {
-        if (err) {
-          logger.error({ error: err.message }, 'JWKS Verification failed');
-          return res.status(401).json({ error: `Unauthorized: ${err.message}` });
-        }
-        
-        const payload = decoded as { sub: string; email?: string };
-        req.user = {
-          id: payload.sub,
-          email: payload.email,
-        };
-        next();
+      const JWKS = getJWKS();
+      const { payload } = await jwtVerify(token, JWKS, {
+        algorithms: ['ES256'],
       });
+      
+      req.user = {
+        id: payload.sub as string,
+        email: payload.email as string,
+      };
+      next();
     } else {
       // Fallback to HMAC if using older Supabase project or custom secret
       if (!secret) throw new Error('SUPABASE_JWT_SECRET is missing for HS256');
