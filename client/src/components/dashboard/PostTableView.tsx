@@ -53,7 +53,7 @@ export function PostTableView({ posts, onDelete, onEdit }: PostTableViewProps) {
                 <td className="p-4">
                   <div className="flex gap-1 flex-wrap">
                     {post.accounts?.map((acc, i) => (
-                      <Badge key={i} variant="outline" className="text-[10px] uppercase font-black border border-black px-1 py-0">
+                      <Badge key={i} variant="default" className="text-[10px] uppercase font-black border border-black px-1 py-0">
                         {acc.platform}
                       </Badge>
                     ))}

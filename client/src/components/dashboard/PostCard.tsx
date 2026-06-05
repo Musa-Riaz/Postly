@@ -38,7 +38,7 @@ export function PostCard({ post, onDelete, onEdit }: PostCardProps) {
       <CardHeader className="p-4 flex flex-row items-center justify-between space-y-0">
         <div className="flex gap-2 flex-wrap">
           {platforms.map((p, i) => (
-            <Badge key={i} variant="outline" className="text-[10px] uppercase font-black border-2 border-black">
+            <Badge key={i} variant="default" className="text-[10px] uppercase font-black border-2 border-black">
               {p}
             </Badge>
           ))}
