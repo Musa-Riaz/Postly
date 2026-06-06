@@ -2,7 +2,7 @@
 
 import React, { useState, useRef } from "react";
 import { useGSAP } from "@gsap/react";
-import { gsap, TextPlugin } from "@/lib/gsap";
+import { gsap } from "@/lib/gsap";
 import { LandingCard } from "./LandingCard";
 import { LandingButton } from "./LandingButton";
 import { Sparkles, Send, Copy, Calendar, RefreshCcw } from "lucide-react";
@@ -40,38 +40,40 @@ export const DemoComposer = () => {
 
   const { contextSafe } = useGSAP({ scope: containerRef });
 
-  const handlePromptClick = contextSafe((prompt: typeof DEMO_PROMPTS[0]) => {
+  const handlePromptClick = (prompt: typeof DEMO_PROMPTS[0]) => {
     if (isGenerating) return;
     
     setActivePrompt(prompt);
     setIsGenerating(true);
     setHasResult(false);
 
-    const tl = gsap.timeline({
-      onComplete: () => {
-        setIsGenerating(false);
-        setHasResult(true);
-      }
-    });
-
-    // 1. Reset input and "type" the prompt
-    tl.to(inputRef.current, { value: "", duration: 0.1 })
-      .to(inputRef.current, { 
-        value: prompt.prompt, 
-        duration: 1.5, 
-        ease: "none" 
+    contextSafe(() => {
+      const tl = gsap.timeline({
+        onComplete: () => {
+          setIsGenerating(false);
+          setHasResult(true);
+        }
       });
 
-    // 2. Fill progress bar
-    tl.to(progressBarRef.current, { width: "100%", duration: 2, ease: "power2.inOut" }, "+=0.2");
+      // 1. Reset input and "type" the prompt
+      tl.to(inputRef.current, { value: "", duration: 0.1 })
+        .to(inputRef.current, { 
+          value: prompt.prompt, 
+          duration: 1.5, 
+          ease: "none" 
+        });
 
-    // 3. Clear progress bar and reveal result
-    tl.set(progressBarRef.current, { width: "0%" })
-      .fromTo(resultRef.current, 
-        { opacity: 0, scale: 0.9, y: 20 }, 
-        { opacity: 1, scale: 1, y: 0, duration: 0.5, ease: "back.out(1.7)" }
-      );
-  });
+      // 2. Fill progress bar
+      tl.to(progressBarRef.current, { width: "100%", duration: 2, ease: "power2.inOut" }, "+=0.2");
+
+      // 3. Clear progress bar and reveal result
+      tl.set(progressBarRef.current, { width: "0%" })
+        .fromTo(resultRef.current, 
+          { opacity: 0, scale: 0.9, y: 20 }, 
+          { opacity: 1, scale: 1, y: 0, duration: 0.5, ease: "back.out(1.7)" }
+        );
+    })();
+  };
 
   return (
     <section id="demo" ref={containerRef} className="py-24 bg-surface px-6 border-b-4 border-black">

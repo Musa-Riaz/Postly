@@ -1,4 +1,4 @@
-"use client";
+ "use client";
 
 import React, { useRef } from "react";
 import { useGSAP } from "@gsap/react";
@@ -79,9 +79,18 @@ export const PricingSection = () => {
 };
 
 export const FinalCTA = () => {
+  const containerRef = useRef<HTMLDivElement>(null);
   const buttonRef = useRef<HTMLDivElement>(null);
 
   useGSAP(() => {
+    // Set random positions for sparkles after mount
+    gsap.set(".sparkle-item", {
+      top: () => `${Math.random() * 100}%`,
+      left: () => `${Math.random() * 100}%`,
+      scale: () => Math.random() * 2,
+      opacity: 1,
+    });
+
     // Periodic jiggle animation
     const tl = gsap.timeline({ repeat: -1, repeatDelay: 4 });
     tl.to(buttonRef.current, { rotate: 2, duration: 0.1 })
@@ -89,20 +98,15 @@ export const FinalCTA = () => {
       .to(buttonRef.current, { rotate: 1, duration: 0.1 })
       .to(buttonRef.current, { rotate: -1, duration: 0.1 })
       .to(buttonRef.current, { rotate: 0, duration: 0.1 });
-  });
+  }, { scope: containerRef });
 
   return (
-    <section className="py-32 bg-main px-6 border-t-4 border-black text-center relative overflow-hidden">
+    <section ref={containerRef} className="py-32 bg-main px-6 border-t-4 border-black text-center relative overflow-hidden">
       <div className="absolute top-0 left-0 w-full h-full opacity-10 pointer-events-none">
-        {Array.from({ length: 20 }).map((_, i) => (
+        {[...Array(20)].map((_, i) => (
           <Sparkles 
             key={i} 
-            className="absolute animate-pulse" 
-            style={{ 
-              top: `${Math.random() * 100}%`, 
-              left: `${Math.random() * 100}%`,
-              transform: `scale(${Math.random() * 2})`
-            }} 
+            className="absolute animate-pulse sparkle-item opacity-0" 
           />
         ))}
       </div>

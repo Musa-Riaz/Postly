@@ -12,9 +12,10 @@ gsap.defaults({
   ease: 'power2.out',
 });
 
-// Configure ScrollTrigger defaults
-ScrollTrigger.config({
-  autoRefreshEvents: 'visibilitychange,DOMContentLoaded,load,resize',
-});
+if (typeof window !== 'undefined') {
+  ScrollTrigger.config({
+    autoRefreshEvents: 'visibilitychange,DOMContentLoaded,load,resize',
+  });
+}
 
 export { gsap, ScrollTrigger, TextPlugin };
