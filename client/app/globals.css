@@ -4,17 +4,15 @@
 @custom-variant dark (&:is(.dark *));
 
 :root {
-  --background: #FAFAFA;
+  --background: oklch(94.026% 0.01745 117.459);
   --secondary-background: oklch(100% 0 0);
   --foreground: oklch(0% 0 0);
   --main-foreground: oklch(0% 0 0);
   --main: #FFE500; /* Postly Electric Yellow */
-  --border: #0A0A0A;
+  --border: oklch(0% 0 0);
   --ring: oklch(0% 0 0);
   --overlay: oklch(0% 0 0 / 0.8);
   --shadow: 4px 4px 0px 0px var(--border);
-  --shadow-lg: 8px 8px 0px 0px var(--border);
-  --shadow-sm: 2px 2px 0px 0px var(--border);
   --color-secondary: #FF6B6B;
   --color-accent: #4ECDC4;
   --chart-1: #5294FF;
@@ -26,16 +24,14 @@
 }
 
 .dark {
-  --background: #121212;
+  --background: oklch(21.863% 0.05654 274.838);
   --secondary-background: oklch(23.93% 0 0);
-  --foreground: #FAFAFA;
+  --foreground: oklch(92.49% 0) 0;
   --main-foreground: oklch(0% 0 0);
   --main: #FFE500; /* Postly Electric Yellow */
-  --border: #FAFAFA;
+  --border: oklch(0% 0 0);
   --ring: oklch(100% 0 0);
   --shadow: 4px 4px 0px 0px var(--border);
-  --shadow-lg: 8px 8px 0px 0px var(--border);
-  --shadow-sm: 2px 2px 0px 0px var(--border);
   --chart-1: #5294FF;
   --chart-2: #FF6669;
   --chart-3: #E0B700;
@@ -63,41 +59,18 @@
   --spacing-boxShadowY: 4px;
   --spacing-reverseBoxShadowX: -4px;
   --spacing-reverseBoxShadowY: -4px;
-  --radius-base: 0px; /* Neobrutalist is usually sharp */
-  --shadow-neo: var(--shadow);
-  --shadow-neo-lg: var(--shadow-lg);
-  --shadow-neo-sm: var(--shadow-sm);
+  --radius-base: 5px;
+  --shadow-shadow: var(--shadow);
   --font-weight-base: 500;
-  --font-weight-heading: 800;
-
-  --font-sans: var(--font-space-grotesk), ui-sans-serif, system-ui, sans-serif;
-  --font-mono: var(--font-space-mono), ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  --font-weight-heading: 700;
 }
-
+  
 @layer base {
   body {
-    @apply text-foreground font-sans bg-background border-border;
+    @apply text-foreground font-base bg-background;
   }
 
-  h1, h2, h3, h4, h5, h6 {
-    @apply font-sans font-black uppercase tracking-tight;
-  }
-}
-
-@layer components {
-  .neo-border {
-    @apply border-2 border-border;
-  }
-
-  .neo-shadow {
-    @apply shadow-neo;
-  }
-
-  .neo-shadow-lg {
-    @apply shadow-neo-lg;
-  }
-
-  .neo-interactive {
-    @apply transition-all duration-200 active:translate-x-[2px] active:translate-y-[2px] active:shadow-none;
+  h1, h2, h3, h4, h5, h6{
+    @apply font-heading;
   }
 }
