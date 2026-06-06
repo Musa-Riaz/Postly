@@ -4,13 +4,14 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/com
 import { Button } from "@/components/ui/button"
 import { Plus, X, Trash2, ExternalLink, Loader2 } from "lucide-react"
 import { useAccounts, useConnectPlatform, useDisconnectAccount } from "@/hooks/use-accounts"
+import { FaInstagram, FaLinkedin, FaMastodon } from "react-icons/fa"
 import { Skeleton } from "@/components/ui/skeleton"
 
 const SOCIAL_PLATFORMS = [
   { id: 'twitter', name: 'X / Twitter', icon: X, color: 'bg-main', type: 'social' },
-  { id: 'linkedin', name: 'LinkedIn', icon: '', color: 'bg-accent', type: 'social' },
-  { id: 'mastodon', name: 'Mastodon', icon: '', color: 'bg-secondary-background', type: 'social' },
-  {id: 'instagram', name: 'Instagram', icon: '', color: 'bg-main', type: 'social'}
+  { id: 'linkedin', name: 'LinkedIn', icon: FaLinkedin, color: 'bg-accent', type: 'social' },
+  { id: 'mastodon', name: 'Mastodon', icon: FaMastodon, color: 'bg-secondary-background', type: 'social' },
+  {id: 'instagram', name: 'Instagram', icon: FaInstagram, color: 'bg-main', type: 'social'}
 ]
 
 export default function AccountsPage() {
@@ -52,7 +53,10 @@ export default function AccountsPage() {
                 <div key={acc.id} className="flex items-center justify-between p-4 border-2 border-black rounded-base bg-white shadow-shadow">
                    <div className="flex items-center gap-3">
                      <div className="bg-main p-2 border-2 border-black rounded-base">
-                        <X className="h-4 w-4" />
+                        {acc.platform === 'twitter' && <X className="h-4 w-4" />}
+                        {acc.platform === 'linkedin' && <FaLinkedin className="h-4 w-4" />}
+                        {acc.platform === 'mastodon' && <FaMastodon className="h-4 w-4" />}
+                        {acc.platform === 'instagram' && <FaInstagram className="h-4 w-4" />}
                      </div>
                      <div>
                         <p className="font-heading uppercase text-sm">{acc.displayName}</p>

@@ -242,6 +242,21 @@ export class ZernioClient {
       throw error;
     }
   }
+
+  /**
+   * Disconnects an account from Zernio
+   */
+  async disconnectAccount(accountId: string): Promise<any> {
+    try {
+      const { data } = await this.client.accounts.deleteAccount({
+        path: { accountId }
+      });
+      return data;
+    } catch (error: any) {
+      logger.error('Error disconnecting Zernio account:', error.response?.data || error.message);
+      throw error;
+    }
+  }
 }
 
 export const zernio = ZernioClient.getInstance();

@@ -18,10 +18,11 @@ import {
   SidebarGroup,
   SidebarGroupLabel,
   SidebarGroupContent,
+  useSidebar,
 } from "@/components/ui/sidebar"
 import Link from "next/link";
 import { supabase } from "@/lib/supabase/client";
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
 import { ThemeToggle } from "@/components/ThemeToggle"
 
 const navigation = [
@@ -35,6 +36,9 @@ const navigation = [
 
 export function DashboardSidebar() {
   const router = useRouter();
+  const pathname = usePathname();
+  const { state, setOpen } = useSidebar();
+  const isCollapsed = state === "collapsed";
 
   const handleSignOut = async () => {
     await supabase.auth.signOut();
@@ -42,9 +46,17 @@ export function DashboardSidebar() {
   }
 
   return (
-    <Sidebar className="border-r-2 border-border bg-background">
-      <SidebarHeader className="p-4 border-b-2 border-border">
-        <h1 className="text-2xl font-black tracking-tighter uppercase">Postly</h1>
+    <Sidebar 
+      collapsible="icon"
+      onMouseEnter={() => setOpen(true)}
+      onMouseLeave={() => setOpen(false)}
+      className="border-r-2 border-border bg-background transition-all duration-300 ease-in-out"
+    >
+      <SidebarHeader className="p-3 border-b-2 border-border flex flex-row items-center justify-start gap-3 overflow-hidden">
+        <div className="w-8 h-8 bg-main border-2 border-black flex items-center justify-center font-black text-black shrink-0">P</div>
+        <h1 className={`text-2xl font-black tracking-tighter uppercase transition-opacity duration-200 ${isCollapsed ? "opacity-0 invisible w-0" : "opacity-100 visible"}`}>
+          Postly
+        </h1>
       </SidebarHeader>
       
       <SidebarContent>
@@ -52,16 +64,25 @@ export function DashboardSidebar() {
           <SidebarGroupLabel className="font-heading uppercase text-xs">Main Menu</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
-              {navigation.map((item) => (
+              {navigation.map((item) => {
+                const isActive = pathname === item.href;
+                return (
                 <SidebarMenuItem key={item.name}>
-                  <SidebarMenuButton asChild tooltip={item.name} className="hover:bg-main hover:text-main-foreground font-bold">
+                  <SidebarMenuButton asChild tooltip={item.name} 
+                      className={`font-bold transition-colors ${
+          isActive
+            ? "bg-main text-main-foreground border"
+            : "hover:bg-main hover:text-main-foreground"
+        }`}
+                  >
                     <Link href={item.href}>
                       <item.icon className="h-5 w-5" />
                       <span>{item.name}</span>
                     </Link>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
-              ))}
+                )
+})}
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>
@@ -73,7 +94,7 @@ export function DashboardSidebar() {
             <SidebarMenu>
               <SidebarMenuItem>
                 <SidebarMenuButton asChild tooltip="Theme" className="hover:bg-main hover:text-main-foreground font-bold">
-                  <ThemeToggle />
+                  <ThemeToggle collapsed={isCollapsed} />
                 </SidebarMenuButton>
               </SidebarMenuItem>
             </SidebarMenu>

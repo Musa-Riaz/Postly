@@ -109,6 +109,7 @@ export class AccountService {
     if (account.userId !== userId) {
       throw new NotFoundError('Social account not found');
     }
+    await zernio.disconnectAccount(account.zernioId);
     return this.accountRepo.delete(accountId);
   }
 }

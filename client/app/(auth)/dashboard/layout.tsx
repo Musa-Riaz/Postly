@@ -10,7 +10,7 @@ export default function DashboardLayout({
   children: React.ReactNode
 }) {
   return (
-    <SidebarProvider>
+    <SidebarProvider defaultOpen={false}>
       <DashboardSidebar />
       <SidebarInset className="bg-background">
         <main className="flex-1 overflow-auto p-6 md:p-10">
