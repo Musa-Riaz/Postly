@@ -1,7 +1,7 @@
 "use client"
 
-import React, { useState } from 'react'
-import { useAccounts } from '@/hooks/use-accounts'
+import React from 'react'
+import { useComposer } from '@/hooks/use-composer'
 import RichTextEditor from '@/components/composer/RichTextEditor'
 import PlatformPreview from '@/components/composer/PlatformPreview'
 import AIChatSidebar from '@/components/composer/AIChatSidebar'
@@ -9,148 +9,44 @@ import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card'
 import { Check, Image as ImageIcon, Send, Sparkles } from 'lucide-react'
 import { cn } from '@/lib/utils'
-import { toast } from 'sonner'
 import Image from 'next/image'
-import { usePosts } from '@/hooks/use-posts'
 import { ScheduleModal } from '@/components/composer/ScheduleModal'
 import { Loader2 } from 'lucide-react'
-import { useRouter, useSearchParams } from 'next/navigation'
 
 const ComposerClient = () => {
-  const searchParams = useSearchParams()
-  const editId = searchParams.get('edit')
-  
-  const { data: accounts } = useAccounts()
-  const [selectedAccounts, setSelectedAccounts] = useState<string[]>([])
-  const [content, setContent] = useState('')
-  const [mediaUrls, setMediaUrls] = useState<string[]>([])
-  const [activePreview, setActivePreview] = useState<'linkedin' | 'instagram' | 'x'>('linkedin')
-  const [isAiOpen, setIsAiOpen] = useState(false)
-  const [isDragging, setIsDragging] = useState(false)
-  const [isScheduleModalOpen, setIsScheduleModalOpen] = useState(false)
-  
-  const { 
-    createPost, 
-    publishPost, 
-    schedulePost, 
-    updatePost,
-    posts,
-    isLoading,
-    isCreating, 
-    isPublishing, 
-    isScheduling 
-  } = usePosts()
-  
-  const router = useRouter()
-  const fileInputRef = React.useRef<HTMLInputElement>(null)
-  const hasInitialized = React.useRef(false)
-
-  // Pre-populate if editing — runs once when post data first becomes available
-  React.useEffect(() => {
-    if (editId && posts && !hasInitialized.current) {
-      const postToEdit = posts.find(p => p.id === editId)
-      if (postToEdit) {
-        hasInitialized.current = true
-        React.startTransition(() => {
-          setContent(postToEdit.content)
-          setMediaUrls(postToEdit.mediaUrls || [])
-          setSelectedAccounts(postToEdit.accounts?.map(a => a.id) || [])
-        })
-      }
+  const {
+    state: {
+      accounts,
+      selectedAccounts,
+      content,
+      mediaUrls,
+      activePreview,
+      isAiOpen,
+      isDragging,
+      isScheduleModalOpen,
+      isLoading,
+      isCreating,
+      isPublishing,
+      isScheduling
+    },
+    actions: {
+      setContent,
+      setActivePreview,
+      setIsAiOpen,
+      setIsScheduleModalOpen,
+      toggleAccount,
+      handleApplyAiContent,
+      handleFiles,
+      handleDragOver,
+      handleDragLeave,
+      handleDrop,
+      removeMedia,
+      handlePost
+    },
+    refs: {
+      fileInputRef
     }
-  }, [editId, posts])
-
-  const toggleAccount = (id: string) => {
-    setSelectedAccounts(prev => 
-      prev.includes(id) ? prev.filter(a => a !== id) : [...prev, id]
-    )
-  }
-
-  const handleApplyAiContent = (aiContent: string) => {
-    const formattedContent = aiContent.includes('<p>') ? aiContent : `<p>${aiContent.replace(/\n/g, '<br>')}</p>`
-    setContent(formattedContent)
-    setIsAiOpen(false)
-    toast.success('AI content applied to composer!')
-  }
-
-  const handleFiles = (files: FileList | File[]) => {
-    const urls = Array.from(files).map(file => URL.createObjectURL(file))
-    setMediaUrls(prev => [...prev, ...urls])
-    toast.success(`${files.length} file(s) added`)
-  }
-
-  const handleDragOver = (e: React.DragEvent) => {
-    e.preventDefault()
-    setIsDragging(true)
-  }
-
-  const handleDragLeave = (e: React.DragEvent) => {
-    e.preventDefault()
-    setIsDragging(false)
-  }
-
-  const handleDrop = (e: React.DragEvent) => {
-    e.preventDefault()
-    setIsDragging(false)
-    if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
-      handleFiles(e.dataTransfer.files)
-    }
-  }
-
-  const removeMedia = (index: number) => {
-    setMediaUrls(prev => {
-      const newUrls = [...prev]
-      URL.revokeObjectURL(newUrls[index])
-      newUrls.splice(index, 1)
-      return newUrls
-    })
-  }
-
-  const handlePost = async (status: 'DRAFT' | 'PUBLISH' | 'SCHEDULE', scheduledDate?: Date) => {
-    if (selectedAccounts.length === 0) {
-      const isDraft = status === 'DRAFT';
-      if (!isDraft) {
-        toast.error('Please select at least one account');
-        return;
-      }
-    }
-    if (!content || content === '<p></p>') {
-      toast.error('Post content cannot be empty');
-      return;
-    }
-    
-    try {
-      let postId = editId;
-      
-      const postData = {
-        accountIds: selectedAccounts,
-        content,
-        mediaUrls, 
-        status: (status === 'PUBLISH' ? 'PUBLISHED' : (status === 'SCHEDULE' ? 'SCHEDULED' : 'DRAFT')) as 'DRAFT' | 'SCHEDULED' | 'PUBLISHED',
-        scheduledAt: scheduledDate
-      };
-
-      if (editId) {
-        await updatePost({ id: editId, ...postData });
-      } else {
-        const post = await createPost(postData);
-        postId = post.id;
-      }
-
-      if (status === 'PUBLISH' && postId) {
-        await publishPost(postId);
-        router.push('/dashboard/posts');
-      } else if (status === 'SCHEDULE' && scheduledDate && postId) {
-        await schedulePost({ postId, scheduledAt: scheduledDate });
-        router.push('/dashboard/posts');
-      } else {
-        toast.success(editId ? 'Post updated successfully!' : 'Post draft saved successfully!');
-        router.push('/dashboard/posts');
-      }
-    } catch {
-      // Error handled by hook
-    }
-  }
+  } = useComposer()
 
   return (
     <div className="flex h-[calc(100vh-64px)] overflow-hidden animate-in fade-in slide-in-from-bottom-4 duration-500">
@@ -245,6 +141,8 @@ const ComposerClient = () => {
                     <div className="grid gap-1">
                         <CardTitle>Media</CardTitle>
                         <CardDescription>Add images or videos to your post.</CardDescription>
+                        {/* Note */}
+                        <p className="text-xs text-yellow-500 font-semibold">Note: We currently support only images.</p>
                     </div>
                     <Button size="icon" variant="neutral">
                         <ImageIcon size={20} />
@@ -384,6 +282,7 @@ const ComposerClient = () => {
     </div>
   )
 }
+
 
 
 

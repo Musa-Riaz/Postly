@@ -33,10 +33,9 @@ export class PostService {
 
   async deletePost(postId: string, userId: string) {
     const post = await this.getPostById(postId, userId);
-    const res = await this.zernioClient.deletePost(post.zernioPostId!);
-    console.log(post.zernioPostId)
-    console.log(res);
+    //First delete the post from supabase
     await this.postRepo.delete(postId);
+    await this.zernioClient.deletePost(post.zernioPostId!);
   }
 
   async publishPost(postId: string, userId: string) {

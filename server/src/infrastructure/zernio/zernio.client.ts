@@ -10,7 +10,6 @@ export class ZernioClient {
   private constructor() {
     const apiKey = process.env.ZERNIO_API_KEY;
     if (!apiKey) {
-      console.log(process.env.ZERNIO_API_KEY)
       throw new Error('ZERNIO_API_KEY is not defined in environment variables');
     }
     this.client = new Zernio({ apiKey });
@@ -109,7 +108,10 @@ export class ZernioClient {
         body: {
           content: data.content,
           platforms: data.accounts,
-          media: data.mediaUrls?.map(url => ({ url })),
+          mediaItems: data.mediaUrls?.map(url => ({
+            type: 'image',
+            url,
+          })) ?? [],
           scheduledFor: data.scheduledFor,
         }
       });

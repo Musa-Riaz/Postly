@@ -1,6 +1,7 @@
 "use client"
 
 import { useEditor, EditorContent } from '@tiptap/react'
+import React, { useEffect } from 'react'
 import StarterKit from '@tiptap/starter-kit'
 import Placeholder from '@tiptap/extension-placeholder'
 import CharacterCount from '@tiptap/extension-character-count'
@@ -31,10 +32,17 @@ const RichTextEditor = ({ content, onChange, placeholder = 'Write your post here
     },
     editorProps: {
       attributes: {
-        class: 'prose prose-sm sm:prose lg:prose-lg xl:prose-2xl focus:outline-none min-h-[150px] p-4 font-base',
+        class: 'prose prose-sm sm:prose lg:prose-lg xl:prose-2xl focus:outline-none min-h-[150px] p-4 font-base whitespace-pre-wrap',
       },
     },
   })
+
+  // Update editor content when external content changes (e.g., loading post to edit)
+  useEffect(() => {
+    if (editor && content !== editor.getHTML() && content !== "") {
+      editor.commands.setContent(content)
+    }
+  }, [content, editor])
 
   if (!editor) {
     return null

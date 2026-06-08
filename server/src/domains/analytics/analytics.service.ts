@@ -90,7 +90,6 @@ export class AnalyticsService {
       platform: filters.platform,
       limit: 50
     });
-    console.log('this is the profile id', profileId, filters.platform)
     return data;
   }
 }
