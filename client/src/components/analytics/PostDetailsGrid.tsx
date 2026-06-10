@@ -89,7 +89,7 @@ export const PostAnalyticsCard = ({ post, onClick }: PostAnalyticsCardProps) => 
             <MousePointer2 className="h-4 w-4 text-emerald-500" />
             <div className="flex flex-col">
               <span className="text-xs font-black">{(metrics.shares || 0).toLocaleString()}</span>
-              <span className="text-[8px] uppercase font-bold text-slate-500">Reach</span>
+              <span className="text-[8px] uppercase font-bold text-slate-500">Shares</span>
             </div>
           </div>
         </div>
