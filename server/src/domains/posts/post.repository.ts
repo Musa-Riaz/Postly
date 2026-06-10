@@ -23,7 +23,10 @@ export class PrismaPostRepository implements IPostRepository {
   async findById(id: string): Promise<Post | null> {
     return this.prisma.post.findUnique({
       where: { id },
-      include: { accounts: true }
+      include: { 
+        accounts: true, 
+        analytics: true 
+      }
     }) as unknown as Post | null;
   }
 
@@ -71,7 +74,10 @@ export class PrismaPostRepository implements IPostRepository {
     return this.prisma.post.findMany({
       where,
       orderBy,
-      include: { accounts: true }
+      include: { 
+        accounts: true,
+        analytics: true
+      }
     }) as unknown as Post[];
   }
 

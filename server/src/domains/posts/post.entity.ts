@@ -13,6 +13,7 @@ export interface Post {
   triggerJobId?: string | null;
   createdAt: Date;
   accounts?: any[];
+  analytics?: any;
 }
 
 export interface CreatePostDto {

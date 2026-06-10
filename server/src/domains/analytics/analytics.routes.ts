@@ -16,5 +16,6 @@ router.get('/overview', analyticsController.getOverview);
 router.get('/daily', analyticsController.getDaily);
 router.get('/insights', analyticsController.getInsights);
 router.get('/posts', analyticsController.getPosts);
+router.get('/posts/:postId', analyticsController.getPost);
 
 export default router;

@@ -43,6 +43,9 @@ export class PostController {
         } : undefined
       };
 
+      // Sync posts with Zernio to update statuses and analytics
+      await this.postService.syncUserPosts(userId);
+
       const posts = await this.postService.getUserPosts(userId, options);
       res.json(posts);
     } catch (error) {

@@ -85,11 +85,21 @@ export class AnalyticsService {
 
   async getPosts(userId: string, filters: AnalyticsFilters) {
     const profileId = await this.getProfileId(userId);
-    const data = await this.zernioClient.listPosts({
+    const data = await this.zernioClient.getAnalytics({
       profileId,
       platform: filters.platform,
-      limit: 50
+      startDate: filters.startDate,
+      endDate: filters.endDate
     });
+    return data;
+  }
+
+  async getPost(userId: string, postId: string){
+    const profileId = await this.getProfileId(userId);
+    const data = await this.zernioClient.getPost({
+      profileId,
+      postId
+    })
     return data;
   }
 }

@@ -143,7 +143,7 @@ export class ZernioClient {
   /**
    * Fetches overall aggregated analytics
    */
-  async getAnalytics(query: { profileId: string; platform?: string; startDate?: string; endDate?: string }): Promise<any> {
+  async getAnalytics(query: { profileId: string; platform?: string; startDate?: string; endDate?: string; postId?: string }): Promise<any> {
     try {
       const { data } = await this.client.analytics.getAnalytics({
         query
@@ -231,7 +231,7 @@ export class ZernioClient {
   }
 
   /**
-   * Fetches posts with analytics for a profile
+   * Fetches posts for a profile
    */
   async listPosts(query: { profileId: string; platform?: string; status?: string; limit?: number; offset?: number }): Promise<any> {
     try {
@@ -244,6 +244,23 @@ export class ZernioClient {
       throw error;
     }
   }
+
+    /**
+   * Fetches post with for a profile
+   */
+
+    async getPost(query:{profileId: string, postId: string}): Promise<any>{
+      try{
+        const { data } = await this.client.posts.getPost({
+          query
+        });
+        return data;
+      }
+      catch(error: any){
+        logger.error('Error fetching Zernio post:', error.response?.data || error.message);
+        throw error;
+      }
+    }
 
   /**
    * Disconnects an account from Zernio

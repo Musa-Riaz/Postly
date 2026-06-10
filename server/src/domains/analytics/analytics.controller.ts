@@ -61,4 +61,16 @@ export class AnalyticsController {
       next(error);
     }
   };
+
+  getPost = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const userId = (req as any).user.id;
+      const postId = req.params.postId;
+
+      const data = await this.analyticsService.getPost(userId, postId);
+      res.json(data);
+    } catch (error) {
+      next(error);
+    }
+  };
 }
