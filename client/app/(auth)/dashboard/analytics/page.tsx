@@ -12,6 +12,7 @@ import { useAnalytics, AnalyticsFilters } from "@/hooks/use-analytics";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Skeleton } from "@/components/ui/skeleton";
 import { AlertCircle } from "lucide-react";
+import { PostDetailsModal } from "@/components/dashboard/PostDetailsModal";
 
 export default function AnalyticsPage() {
   const [filters, setFilters] = useState<AnalyticsFilters>({
@@ -19,6 +20,10 @@ export default function AnalyticsPage() {
     startDate: undefined,
     endDate: undefined,
   });
+
+  // 📝 Details modal state
+  const [detailsOpen, setDetailsOpen] = useState(false)
+  const [selectedPost, setSelectedPost] = useState<any>(null)
 
   const { 
     overview, 
@@ -30,6 +35,11 @@ export default function AnalyticsPage() {
     isFetching,
     refetch 
   } = useAnalytics(filters);
+
+  const handleViewDetails = (post: any) => {
+    setSelectedPost(post)
+    setDetailsOpen(true)
+  }
 
   if (isLoading) {
     return (
@@ -126,9 +136,15 @@ export default function AnalyticsPage() {
           <div className="mb-6 flex justify-between items-center">
             <h2 className="text-2xl font-black uppercase tracking-tighter">Content Performance</h2>
           </div>
-          <PostDetailsGrid posts={posts} />
+          <PostDetailsGrid posts={posts} onClickCard={handleViewDetails} />
         </TabsContent>
       </Tabs>
+
+      <PostDetailsModal 
+        isOpen={detailsOpen}
+        onClose={() => setDetailsOpen(false)}
+        post={selectedPost}
+      />
     </div>
   );
 }

@@ -12,6 +12,13 @@ export interface Post {
   publishedAt?: string;
   createdAt: string;
   accounts?: Array<{ id: string; platform: string; handle?: string; avatarUrl?: string }>;
+  analytics?: {
+    impressions: number;
+    likes: number;
+    comments: number;
+    shares: number;
+    reach: number;
+  };
 }
 
 export interface CreatePostDto {

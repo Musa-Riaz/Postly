@@ -61,7 +61,7 @@ export const InsightsDashboard = ({ insights }: InsightsDashboardProps) => {
       heatmap: {
         radius: 2,
         enableShades: true,
-        shadeIntensity: 0.5,
+        shadeIntensity: 0.5
       }
     }
   };

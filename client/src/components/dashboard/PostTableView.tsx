@@ -17,9 +17,10 @@ interface PostTableViewProps {
   posts: Post[]
   onDelete: (id: string) => void
   onEdit: (id: string) => void
+  onClickRow?: (post: Post) => void
 }
 
-export function PostTableView({ posts, onDelete, onEdit }: PostTableViewProps) {
+export function PostTableView({ posts, onDelete, onEdit, onClickRow }: PostTableViewProps) {
   const getStatusColor = (status: string) => {
     switch (status) {
       case 'PUBLISHED': return 'bg-green-400'
@@ -44,7 +45,11 @@ export function PostTableView({ posts, onDelete, onEdit }: PostTableViewProps) {
           </thead>
           <tbody>
             {posts.map((post) => (
-              <tr key={post.id} className="border-b-2 border-black last:border-0 hover:bg-accent/5 transition-colors">
+              <tr 
+                key={post.id} 
+                onClick={() => onClickRow?.(post)}
+                className="border-b-2 border-black last:border-0 hover:bg-accent/5 transition-colors cursor-pointer"
+              >
                 <td className="p-4">
                   <div className="font-bold line-clamp-1 max-w-xs">
                     {post.content.replace(/<[^>]*>/g, '') || <span className="text-muted-foreground italic">No content</span>}

@@ -9,6 +9,7 @@ import { Loader2, Plus, Inbox } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
+import { PostDetailsModal } from '@/components/dashboard/PostDetailsModal'
 
 import {
   AlertDialog,
@@ -27,23 +28,32 @@ export default function PostsPage() {
   const [viewMode, setViewMode] = useState<'grid' | 'table'>('grid')
   const [filters, setFilters] = useState<PostFilterOptions>({})
 
-  // 🔥 delete dialog state
+  // delete dialog state
   const [open, setOpen] = useState(false)
   const [deleteId, setDeleteId] = useState<string | null>(null)
 
+  // Details modal state
+  const [detailsOpen, setDetailsOpen] = useState(false)
+  const [selectedPost, setSelectedPost] = useState<any>(null)
+
   const { posts, isLoading, deletePost } = usePosts(filters)
+
+  const handleViewDetails = (post: any) => {
+    setSelectedPost(post)
+    setDetailsOpen(true)
+  }
 
   const handleEdit = (id: string) => {
     router.push(`/dashboard/composer?edit=${id}`)
   }
 
-  // 👉 open dialog only
+  // open dialog only
   const handleDelete = (id: string) => {
     setDeleteId(id)
     setOpen(true)
   }
 
-  // 👉 actual delete happens here
+  // actual delete happens here
   const confirmDelete = async () => {
     if (!deleteId) return
 
@@ -101,6 +111,7 @@ export default function PostsPage() {
                 post={post}
                 onEdit={handleEdit}
                 onDelete={handleDelete}
+                onClick={() => handleViewDetails(post)}
               />
             ))}
           </div>
@@ -109,6 +120,7 @@ export default function PostsPage() {
             posts={posts}
             onEdit={handleEdit}
             onDelete={handleDelete}
+            onClickRow={handleViewDetails}
           />
         )
       ) : (
@@ -132,6 +144,13 @@ export default function PostsPage() {
           </Link>
         </div>
       )}
+
+      {/* Post Details Modal */}
+      <PostDetailsModal
+        isOpen={detailsOpen}
+        onClose={() => setDetailsOpen(false)}
+        post={selectedPost}
+      />
 
       {/* ALERT DIALOG */}
       <AlertDialog open={open} onOpenChange={setOpen}>

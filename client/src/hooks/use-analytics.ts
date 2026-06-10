@@ -59,7 +59,12 @@ export interface Post {
   scheduledFor?: string;
   createdAt: string;
   mediaUrls?: string[];
-  analytics?: {
+  mediaItems?: {
+    type?: string,
+    url?: string,
+    thumbnailUrl?: string,
+  }[],
+  analytics: {
     likes: number;
     comments: number;
     shares: number;
@@ -70,7 +75,7 @@ export interface Post {
   platforms: Array<{
     platform: string;
     status: string;
-    accountId: any;
+    accountId: string;
   }>;
 }
 
