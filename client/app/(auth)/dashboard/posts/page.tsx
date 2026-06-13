@@ -49,6 +49,7 @@ export default function PostsPage() {
 
   // open dialog only
   const handleDelete = (id: string) => {
+    
     setDeleteId(id)
     setOpen(true)
   }

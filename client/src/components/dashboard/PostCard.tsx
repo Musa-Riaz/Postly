@@ -145,10 +145,22 @@ export function PostCard({ post, onDelete, onEdit, onClick }: PostCardProps) {
             </Button>
           </DropdownMenuTrigger>
            <DropdownMenuContent align="end" className="border-2 border-black font-bold">
-            <DropdownMenuItem onClick={() => onEdit(post.id)} className="cursor-pointer">
+            <DropdownMenuItem 
+              onClick={(e) => {
+                e.stopPropagation();
+                onEdit(post.id);
+              }} 
+              className="cursor-pointer"
+            >
               <Edit2 className="mr-2 h-4 w-4" /> Edit
             </DropdownMenuItem>
-            <DropdownMenuItem onClick={() => onDelete(post.id)} className="cursor-pointer text-red-500 focus:text-red-500">
+            <DropdownMenuItem 
+              onClick={(e) => {
+                e.stopPropagation();
+                onDelete(post.id);
+              }} 
+              className="cursor-pointer text-red-500 focus:text-red-500"
+            >
               <Trash2 className="mr-2 h-4 w-4" /> Delete
             </DropdownMenuItem>
           </DropdownMenuContent>
