@@ -9,9 +9,10 @@ interface PlatformPreviewProps {
   content: string
   mediaUrls: string[]
   platform: 'linkedin' | 'instagram' | 'x'
+  instagramAspectRatio?: '1:1' | '4:5' | '16:9'
 }
 
-const PlatformPreview = ({ content, mediaUrls, platform }: PlatformPreviewProps) => {
+const PlatformPreview = ({ content, mediaUrls, platform, instagramAspectRatio = '1:1' }: PlatformPreviewProps) => {
   const stripHtml = (html: string) => {
     if (typeof document === 'undefined') return html
     const tmp = document.createElement("DIV")
@@ -55,7 +56,12 @@ const PlatformPreview = ({ content, mediaUrls, platform }: PlatformPreviewProps)
         </div>
         <MoreHorizontal size={16} />
       </div>
-      <div className="aspect-square bg-secondary-background border-y-2 border-border relative flex items-center justify-center">
+      <div className={cn(
+        "bg-secondary-background border-y-2 border-border relative flex items-center justify-center transition-all duration-300",
+        instagramAspectRatio === '1:1' && "aspect-square",
+        instagramAspectRatio === '4:5' && "aspect-[4/5]",
+        instagramAspectRatio === '16:9' && "aspect-[16/9]"
+      )}>
         {mediaUrls.length > 0 ? (
           <Image src={mediaUrls[0]} alt="Post media" fill className="object-cover" />
         ) : (

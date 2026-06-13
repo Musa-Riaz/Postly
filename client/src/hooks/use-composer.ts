@@ -8,6 +8,7 @@ import { toast } from 'sonner'
 import { supabase } from '@/lib/supabase/client'
 
 export type PreviewPlatform = 'linkedin' | 'instagram' | 'x'
+export type InstagramAspectRatio = '1:1' | '4:5' | '16:9'
 
 export function useComposer() {
   const router = useRouter()
@@ -31,6 +32,7 @@ export function useComposer() {
   const [content, setContent] = useState('')
   const [media, setMedia] = useState<{ url: string, file?: File }[]>([])
   const [activePreview, setActivePreview] = useState<PreviewPlatform>('linkedin')
+  const [instagramAspectRatio, setInstagramAspectRatio] = useState<InstagramAspectRatio>('1:1')
   const [isAiOpen, setIsAiOpen] = useState(false)
   const [isDragging, setIsDragging] = useState(false)
   const [isScheduleModalOpen, setIsScheduleModalOpen] = useState(false)
@@ -135,6 +137,15 @@ export function useComposer() {
     })
   }
 
+  const reorderMedia = (startIndex: number, endIndex: number) => {
+    setMedia(prev => {
+      const result = [...prev]
+      const [removed] = result.splice(startIndex, 1)
+      result.splice(endIndex, 0, removed)
+      return result
+    })
+  }
+
   const handlePost = async (status: 'DRAFT' | 'PUBLISH' | 'SCHEDULE', scheduledDate?: Date) => {
     if (selectedAccounts.length === 0) {
       const isDraft = status === 'DRAFT';
@@ -211,6 +222,7 @@ export function useComposer() {
       content,
       mediaUrls: media.map(m => m.url),
       activePreview,
+      instagramAspectRatio,
       isAiOpen,
       isDragging,
       isScheduleModalOpen,
@@ -225,6 +237,7 @@ export function useComposer() {
       setContent,
       setMedia,
       setActivePreview,
+      setInstagramAspectRatio,
       setIsAiOpen,
       setIsDragging,
       setIsScheduleModalOpen,
@@ -235,6 +248,7 @@ export function useComposer() {
       handleDragLeave,
       handleDrop,
       removeMedia,
+      reorderMedia,
       handlePost
     },
     refs: {

@@ -11,7 +11,8 @@ import { Check, Image as ImageIcon, Send, Sparkles } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import Image from 'next/image'
 import { ScheduleModal } from '@/components/composer/ScheduleModal'
-import { Loader2 } from 'lucide-react'
+import { Loader2, GripVertical, X } from 'lucide-react'
+import AspectRatioSelector from '@/components/composer/AspectRatioSelector'
 
 const ComposerClient = () => {
   const {
@@ -21,6 +22,7 @@ const ComposerClient = () => {
       content,
       mediaUrls,
       activePreview,
+      instagramAspectRatio,
       isAiOpen,
       isDragging,
       isScheduleModalOpen,
@@ -32,6 +34,7 @@ const ComposerClient = () => {
     actions: {
       setContent,
       setActivePreview,
+      setInstagramAspectRatio,
       setIsAiOpen,
       setIsScheduleModalOpen,
       toggleAccount,
@@ -41,6 +44,7 @@ const ComposerClient = () => {
       handleDragLeave,
       handleDrop,
       removeMedia,
+      reorderMedia,
       handlePost
     },
     refs: {
@@ -184,19 +188,33 @@ const ComposerClient = () => {
                         </Button>
                     </div>
 
-                    {mediaUrls.length > 0 && (
+                      {mediaUrls.length > 0 && (
                         <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 gap-4 mt-6">
                             {mediaUrls.map((url, index) => (
-                                <div key={index} className="relative group aspect-square border-2 border-border rounded-base overflow-hidden bg-secondary-background shadow-shadow transition-all hover:-translate-y-1">
+                                <div 
+                                    key={index} 
+                                    draggable
+                                    onDragStart={(e) => e.dataTransfer.setData('text/plain', index.toString())}
+                                    onDragOver={(e) => e.preventDefault()}
+                                    onDrop={(e) => {
+                                        e.preventDefault();
+                                        const fromIndex = parseInt(e.dataTransfer.getData('text/plain'));
+                                        reorderMedia(fromIndex, index);
+                                    }}
+                                    className="relative group aspect-square border-2 border-border rounded-base overflow-hidden bg-secondary-background shadow-shadow transition-all hover:-translate-y-1 cursor-move"
+                                >
                                     <Image src={url} alt={`Media ${index}`} fill className="object-cover" />
+                                    <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                                        <GripVertical className="text-white" />
+                                    </div>
                                     <button 
                                         onClick={(e) => {
                                             e.stopPropagation();
                                             removeMedia(index);
                                         }}
-                                        className="absolute top-1 right-1 size-6 bg-red-500 text-white rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity border-2 border-border"
+                                        className="absolute top-1 right-1 size-6 bg-red-500 text-white rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity border-2 border-border z-10"
                                     >
-                                        <Check size={12} className="rotate-45" />
+                                        <X size={12} />
                                     </button>
                                 </div>
                             ))}
@@ -241,10 +259,20 @@ const ComposerClient = () => {
                             X (Twitter)
                          </Button>
                     </div>
+                    {activePreview === 'instagram' && (
+                        <div className="animate-in fade-in slide-in-from-top-2">
+                             <p className="text-xs font-bold mb-2 uppercase opacity-60">Aspect Ratio</p>
+                             <AspectRatioSelector 
+                                value={instagramAspectRatio} 
+                                onChange={setInstagramAspectRatio} 
+                             />
+                        </div>
+                    )}
                     <PlatformPreview 
                         content={content} 
                         mediaUrls={mediaUrls} 
                         platform={activePreview}
+                        instagramAspectRatio={instagramAspectRatio}
                     />
                     
                     {/* Platform Switcher Guide */}

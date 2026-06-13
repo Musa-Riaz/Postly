@@ -213,12 +213,12 @@ export function PostDetailsModal({ post, isOpen, onClose }: PostDetailsModalProp
             <div className="space-y-4">
               <h3 className="font-black uppercase text-sm border-b-4 border-black pb-1">Performance</h3>
               <div className="grid grid-cols-2 gap-3">
-                <MetricBox icon={<Heart className="text-red-500" />} label="Likes" value={analytics.likes} />
-                <MetricBox icon={<MessageCircle className="text-blue-500" />} label="Replies" value={analytics.comments} />
-                <MetricBox icon={<TrendingUp className="text-amber-500" />} label="Impressions" value={analytics.views} />
-                <MetricBox icon={<MousePointer2 className="text-emerald-500" />} label="Comments" value={analytics.comments} />
-                <MetricBox icon={<Share2 className="text-purple-500" />} label="Shares" value={analytics.shares} />
-                <MetricBox icon={<ArrowUpRight className="text-main" />} label="ER%" value={`${(analytics.engagementRate || 0).toFixed(2)}%`} />
+                <MetricBox icon={<Heart className="text-red-500" />} label="Likes" value={analytics?.likes} />
+                <MetricBox icon={<MessageCircle className="text-blue-500" />} label="Replies" value={analytics?.comments} />
+                <MetricBox icon={<TrendingUp className="text-amber-500" />} label="Impressions" value={analytics?.views} />
+                <MetricBox icon={<MousePointer2 className="text-emerald-500" />} label="Comments" value={analytics?.comments} />
+                <MetricBox icon={<Share2 className="text-purple-500" />} label="Shares" value={analytics?.shares} />
+                <MetricBox icon={<ArrowUpRight className="text-main" />} label="ER%" value={`${(analytics?.engagementRate || 0).toFixed(2)}%`} />
               </div>
             </div>
 
